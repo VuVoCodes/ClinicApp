@@ -161,7 +161,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume(){
         super.onResume();
-        //mMap.clear();
+        if(mMap != null){
+            mMap.clear();
+        }
         new GetClinic().execute();
     }
 
