@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -44,6 +46,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient locationClient;
     private LocationRequest locationRequest;
     private ArrayList<Clinic> clinicArray;
+    private String requestType;
+    private Double returnedLat;
+    private Double returnedLon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        requestType = "";
+        returnedLat = 0.0;
+        returnedLon = 0.0;
         try{
             MapsInitializer.initialize(getApplicationContext());
 
@@ -93,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
-        startLocationUpdate();
+//        startLocationUpdate();
         new GetClinic().execute();
 
     }
@@ -126,12 +134,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 ,null);
-
     }
+
+
 
     @SuppressLint("MissingPermission")
     public void onGetPositionClick(View view) {
-
         locationClient.getLastLocation().
                 addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
@@ -158,19 +166,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MY_LOCATION_REQUEST);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onResume(){
         super.onResume();
-        if(mMap != null){
+        Log.d(TAG, "onResume: " + requestType);
+        if(requestType.matches("mapPosition")){
+            locationClient.getLastLocation().
+                    addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if(location!=null){
+                                LatLng latLng = new LatLng(returnedLat,returnedLon);
+                                mMap.addMarker(new MarkerOptions().position(latLng)
+                                        .icon(BitmapDescriptorFactory.defaultMarker()));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                Toast.makeText(MapsActivity.this,
+                                        "(" + returnedLat + ","+
+                                                returnedLon +")",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MapsActivity.this, "Pls wait", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+        if (mMap != null) {
             mMap.clear();
         }
         new GetClinic().execute();
+
     }
+
+
 
     public void onViewAll(View view) {
         Intent intent = new Intent(MapsActivity.this, ClinicTableView.class);
-        startActivity(intent);
-
+        startActivityForResult(intent,1);
     }
 
     private class GetClinic extends AsyncTask<Void,Void,Void>{
@@ -206,6 +238,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == 1){
+                requestType = data.getStringExtra("requestType");
+                returnedLat = data.getDoubleExtra("lat",0);
+                returnedLon = data.getDoubleExtra("lon",0);
+//                Log.d(TAG, "return Requs: " + returnedLat);
             }
         }
     }

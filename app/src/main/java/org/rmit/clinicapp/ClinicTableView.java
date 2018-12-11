@@ -141,7 +141,13 @@ public class ClinicTableView extends AppCompatActivity {
                         editClinic(clinicID);
                         break;
                     case R.id.map:
-                        Toast.makeText(context,"Map",Toast.LENGTH_LONG).show();
+                        Toast.makeText(context,clinics.get(clinicID).name,Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ClinicTableView.this,MapsActivity.class);
+                        intent.putExtra("lat",clinics.get(clinicID).latitute);
+                        intent.putExtra("lon",clinics.get(clinicID).longitute);
+                        intent.putExtra("requestType","mapPosition");
+                        setResult(RESULT_OK,intent);
+                        finish();
                         break;
                 }
                 return false;
