@@ -39,7 +39,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddEditClinicActivity" />
-        <activity android:name=".ClinicTableView"></activity>
+        <activity android:name=".ClinicTableView" />
+        <activity android:name=".ClinicDetailView"></activity>
     </application>
 
 </manifest>

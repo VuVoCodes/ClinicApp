@@ -120,6 +120,10 @@ public class AddEditClinicActivity extends AppCompatActivity {
         }
     }
 
+    public void cancelView(View view) {
+        finish();
+    }
+
 
     private class PostClinic extends AsyncTask<Void,Void,Void>{
         private String status = "";
@@ -164,7 +168,6 @@ public class AddEditClinicActivity extends AppCompatActivity {
             intent.putExtra("returnLead",clinic.lead_physician);
             intent.putExtra("returnSpecialize",clinic.specialization);
             intent.putExtra("returnAvgPrice",clinic.average_price);
-//           intent.putStringArrayListExtra("lll",clinic.specialization)
             setResult(RESULT_OK,intent);
             finish();
         }

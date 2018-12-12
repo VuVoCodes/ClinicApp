@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
-//        startLocationUpdate();
+        startLocationUpdate();
         new GetClinic().execute();
 
     }
@@ -124,8 +124,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 location.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         //  mMap.clear();
-//                        mMap.addMarker(new MarkerOptions().position(latLng)
-//                                        .icon(BitmapDescriptorFactory.defaultMarker()));
+                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                        .icon(BitmapDescriptorFactory.defaultMarker()));
                         Toast.makeText(MapsActivity.this,
                                 "(" + location.getLatitude() + ","+
                                         location.getLongitude() +")",
@@ -180,7 +180,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 LatLng latLng = new LatLng(returnedLat,returnedLon);
                                 mMap.addMarker(new MarkerOptions().position(latLng)
                                         .icon(BitmapDescriptorFactory.defaultMarker()));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//                                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(returnedLat,returnedLon), 16.0f));
                                 Toast.makeText(MapsActivity.this,
                                         "(" + returnedLat + ","+
                                                 returnedLon +")",
@@ -195,7 +196,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.clear();
         }
         new GetClinic().execute();
-
     }
 
 
@@ -252,7 +252,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 requestType = data.getStringExtra("requestType");
                 returnedLat = data.getDoubleExtra("lat",0);
                 returnedLon = data.getDoubleExtra("lon",0);
-//                Log.d(TAG, "return Requs: " + returnedLat);
             }
         }
     }

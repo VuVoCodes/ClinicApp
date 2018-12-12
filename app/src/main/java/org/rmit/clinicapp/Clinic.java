@@ -5,18 +5,6 @@ public class Clinic {
     String name, impression, lead_physician, specialization, id;
     int rating, average_price;
 
-//    public Clinic(double latitute, double longitute, String name, String impression, String lead_physician, String specialization, String id, int rating, int average_price) {
-//        this.latitute = latitute;
-//        this.longitute = longitute;
-//        this.name = name;
-//        this.impression = impression;
-//        this.lead_physician = lead_physician;
-//        this.specialization = specialization;
-//        this.id = id;
-//        this.rating = rating;
-//        this.average_price = average_price;
-//    }
-
     public double getLatitute() {
         return latitute;
     }
