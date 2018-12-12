@@ -1,5 +1,7 @@
 package org.rmit.clinicapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -107,16 +109,36 @@ public class AddEditClinicActivity extends AppCompatActivity {
 
 
     public void confirmAction(View view) {
-        clinic.name = editName.getText().toString();
-        clinic.rating = Integer.parseInt(editRating.getText().toString());
-        clinic.impression = editImpression.getText().toString();
-        clinic.average_price = Integer.parseInt(editAveragePrice.getText().toString());
-        clinic.lead_physician = editLead.getText().toString();
-        clinic.specialization = editSpecialization.getText().toString();
-        if(requestType.matches("add")){
-            new PostClinic().execute();
-        }else{
-            new PutClinic().execute();
+
+
+        if(editName.getText().toString().matches("") || editRating.getText().toString().matches("")
+                || editImpression.getText().toString().matches("")
+                || editAveragePrice.getText().toString().matches("")
+                || editLead.getText().toString().matches("")
+                || editSpecialization.getText().toString().matches("")) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(AddEditClinicActivity.this).create();
+            alertDialog.setTitle("You must fill the necessary field");
+            alertDialog.setMessage("You must fill the necessary field");
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OKAY", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
+        }
+        else{
+            clinic.name = editName.getText().toString();
+            clinic.rating = Integer.parseInt(editRating.getText().toString());
+            clinic.impression = editImpression.getText().toString();
+            clinic.average_price = Integer.parseInt(editAveragePrice.getText().toString());
+            clinic.lead_physician = editLead.getText().toString();
+            clinic.specialization = editSpecialization.getText().toString();
+            if(requestType.matches("add")){
+                new PostClinic().execute();
+            }else{
+                new PutClinic().execute();
+            }
         }
     }
 

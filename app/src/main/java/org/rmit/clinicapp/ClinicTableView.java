@@ -247,13 +247,14 @@ public class ClinicTableView extends AppCompatActivity {
         if(!filteredBoo){
             String sortText = sortEditor.getText().toString();
             SortingIt(sortText);
-            sortButton.setText(sortText);
+            sortButton.setText("Cancel Sort " + sortText);
             sortEditor.setEnabled(false);
         }else{
             CustomListViewGenerator(clinics);
             sortButton.setText("sort");
             filteredBoo = false;
             sortEditor.setEnabled(true);
+            sortEditor.setText("");
         }
     }
 
