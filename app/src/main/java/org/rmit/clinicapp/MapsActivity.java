@@ -230,7 +230,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     );
                     mMap.addMarker(new MarkerOptions().position(position)
                             .icon(BitmapDescriptorFactory.fromResource(
-                                    R.drawable.ic_action_name
+                                    R.drawable.hospital_marker
                             ))
                             .title("Clinic")
                             .snippet(jsonObject.getString("name")));
